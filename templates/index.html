@@ -1,7 +1,6 @@
 <h2>Choisir une source vidéo</h2>
 
 <form id="source-form">
-  <!-- Source -->
   <fieldset>
     <legend>Source</legend>
     <label>
@@ -13,7 +12,6 @@
     <input type="file" id="video-file" name="video" style="display:none;">
   </fieldset>
 
-  <!-- Task -->
   <fieldset>
     <legend>Tâche</legend>
     <label>
@@ -24,7 +22,6 @@
     </label>
   </fieldset>
 
-  <!-- Model size -->
   <fieldset>
     <legend>Taille du modèle</legend>
     <label><input type="radio" name="size" value="n" checked> N</label>
@@ -32,48 +29,55 @@
     <label><input type="radio" name="size" value="m"> M</label>
     <label><input type="radio" name="size" value="l"> L</label>
     <label><input type="radio" name="size" value="x"> X</label>
+    <label><input type = "radio" name = "size" value = "custom"> Custom</label>
   </fieldset>
 
   <button type="submit">Lancer</button>
 </form>
 
-<!-- Ici on affiche le flux -->
 <img id="video-stream" width="640" height="480">
+<h1>Count : <span id="kpi">0</span></h1>
 
 <script>
-const form = document.getElementById("source-form");
-const videoFileInput = document.getElementById("video-file");
-const videoStream = document.getElementById("video-stream");
+  const form = document.getElementById("source-form");
+  const videoFileInput = document.getElementById("video-file");
+  const videoStream = document.getElementById("video-stream");
 
-form.addEventListener("change", (e) => {
-  if (e.target.value === "video") {
-    videoFileInput.style.display = "block";
-  } else if (e.target.value === "webcam") {
-    videoFileInput.style.display = "none";
-  }
-});
+  form.addEventListener("change", (e) => {
+    if (e.target.value === "video") {
+      videoFileInput.style.display = "block";
+    } else if (e.target.value === "webcam") {
+      videoFileInput.style.display = "none";
+    }
+  });
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const source = document.querySelector('input[name="source"]:checked').value;
-  const task = document.querySelector('input[name="task"]:checked').value;
-  const size = document.querySelector('input[name="size"]:checked').value;
+    const source = document.querySelector('input[name="source"]:checked').value;
+    const task = document.querySelector('input[name="task"]:checked').value;
+    const size = document.querySelector('input[name="size"]:checked').value;
 
-  if (source === "webcam") {
-    videoStream.src = `/stream?source=webcam&task=${task}&size=${size}`;
-  } else {
-    const file = videoFileInput.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
+    if (source === "webcam") {
+      videoStream.src = `/stream?source=webcam&task=${task}&size=${size}`;
+    } else {
+      const file = videoFileInput.files[0];
+      const formData = new FormData();
+      formData.append("file", file);
 
-    const response = await fetch("/upload_video", {
-      method: "POST",
-      body: formData
-    });
+      const response = await fetch("/upload_video", {
+        method: "POST",
+        body: formData
+      });
 
-    const data = await response.json();
-    videoStream.src = `/stream?source=video&path=${data.path}&task=${task}&size=${size}`;
-  }
-});
+      const data = await response.json();
+      videoStream.src = `/stream?source=video&path=${data.path}&task=${task}&size=${size}`;
+    }
+  });
+
+  const ws = new WebSocket("ws://localhost:8000/ws/detections");
+  ws.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      document.getElementById("kpi").innerText = data.detections;
+  };
 </script>

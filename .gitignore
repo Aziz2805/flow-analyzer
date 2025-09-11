@@ -1,0 +1,31 @@
+# Environnements virtuels
+app_env/
+.venv/
+venv/
+
+# Uploads et données locales
+uploads/
+data/
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Fichiers lourds (modèles ML, datasets)
+*.onnx
+*.h5
+*.pt
+*.pth
+*.zip
+*.tar
+*.gz
+
+# Config IDE
+.vscode/
+.idea/
+
+# Autres
+*.log
+.DS_Store

@@ -5,6 +5,7 @@ venv/
 
 # Uploads et données locales
 uploads/
+outputs/
 data/
 
 # Cache Python

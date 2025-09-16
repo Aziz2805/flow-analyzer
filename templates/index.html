@@ -52,11 +52,12 @@
     /* Video */
     #video-container {
       width: 640px;
+      height: 480px;
     }
 
     /* Chart */
     #chart-container {
-      width: 640px;
+      width: 480px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -64,7 +65,7 @@
 
     /* KPI */
     #kpi-container {
-      width: 200px;
+      width: 320px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -73,20 +74,19 @@
     .kpi-card {
       flex: 1;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
     }
 
     .kpi-card h3 {
-      margin: 0;
-      font-size: 16px;
+      margin-top: 40px;
+      font-size: 20px;
       color: #666;
     }
 
     .kpi-card span {
       display: block;
-      font-size: 28px;
+      font-size: 50px;
       font-weight: bold;
-      margin-top: 8px;
       color: #007bff;
     }
 
@@ -133,6 +133,7 @@
   </form>
 
   <div id="dashboard">
+
     <!-- Video -->
     <div id="video-container" class="card">
       <img id="video-stream" width="640" height="480">
@@ -150,10 +151,11 @@
         <span id="kpi">0</span>
       </div>
       <div class="kpi-card card">
-        <h3>Nouveau KPI</h3>
+        <h3>Vitesse moyenne</h3>
         <span id="kpi2">0</span>
       </div>
     </div>
+
   </div>
 
   <!-- Chart.js -->
@@ -183,8 +185,8 @@
             responsive: true,
             animation: false,
             scales: {
-                x: { title: { display: true, text: 'Time' } },
-                y: { beginAtZero: true, title: { display: true, text: 'Count' } }
+                x: { title: { display: true, text: 'Temps' } },
+                y: { beginAtZero: true, title: { display: true, text: 'Comptages' } }
             }
         }
     });
@@ -239,6 +241,7 @@
           kpiChart.update();
       };
     });
+    
   </script>
 </body>
 </html>

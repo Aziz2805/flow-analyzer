@@ -4,7 +4,9 @@ from fastapi.templating import Jinja2Templates
 from pathlib import Path
 import shutil, cv2, asyncio
 
-from .model import load_model
+from .utils import load_model, get_stats, annotate_frame
+from ultralytics import solutions
+import supervision as sv
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -32,31 +34,45 @@ async def upload_video(file: UploadFile = File(...)):
 
 
 def video_generator(source="webcam", path=None, task="detect", size="n"):
-    """Génère le flux vidéo et met à jour CURRENT_DETECTIONS"""
+    """
+    Génère le flux vidéo et met à jour CURRENT_DETECTIONS
+    """
     global CURRENT_DETECTIONS
+
+    # --- Choix de la source vidéo ---
     if source == "webcam":
         cap = cv2.VideoCapture(0)
     elif source == "video" and path:
         cap = cv2.VideoCapture(path)
     else:
-        return
+        raise ValueError("Source invalide : utiliser 'webcam' ou 'video' avec path.")
 
+    # --- Chargement du modèle ---
     model = load_model(task, size)
 
     while True:
         ret, frame = cap.read()
         if not ret:
             break
-        results = model.track(frame, classes=[0], persist=True)
-        CURRENT_DETECTIONS = len(results[0].boxes)
 
-        annotated_frame = results[0].plot()
+        # --- Inférence YOLO ---
+        results = model.track(frame, classes=[0], persist=True)
+        CURRENT_DETECTIONS = get_stats(results)
+
+        # --- Annotation en fonction de la tâche ---
+        annotated_frame = annotate_frame(frame, results, source, task)
+
+        # --- Encodage JPEG ---
         _, buffer = cv2.imencode(".jpg", annotated_frame)
         frame_bytes = buffer.tobytes()
-        yield (b"--frame\r\n"
-               b"Content-Type: image/jpeg\r\n\r\n" + frame_bytes + b"\r\n")
+
+        yield (
+            b"--frame\r\n"
+            b"Content-Type: image/jpeg\r\n\r\n" + frame_bytes + b"\r\n"
+        )
 
     cap.release()
+
 
 
 @app.get("/stream")
@@ -87,7 +103,6 @@ async def websocket_detections(ws: WebSocket):
 
 @app.on_event("startup")
 async def start_kpi_sender():
-    """Coroutine qui envoie les KPIs à tous les clients websocket"""
     async def send_kpis():
         while True:
             data = {"detections": CURRENT_DETECTIONS}

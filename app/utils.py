@@ -1,6 +1,9 @@
 import cv2
 from ultralytics import YOLO
 
+import numpy as np
+from ultralytics import solutions
+
 
 def load_model(task: str, size: str):
     if size != "custom":
@@ -14,6 +17,7 @@ def load_model(task: str, size: str):
     model = YOLO(model_path)
     return model
 
+
 KPT_NAMES = [
     'Nose', 'L_Eye', 'R_Eye', 'L_Ear', 'R_Ear',
     'L_Shoulder', 'R_Shoulder', 'L_Elbow', 'R_Elbow',
@@ -21,7 +25,23 @@ KPT_NAMES = [
     'R_Knee', 'L_Ankle', 'R_Ankle'
 ]
 
-def get_frame_stats(results, frame_index):
+def get_zone(point, zones):
+    for i, zone in enumerate(zones):
+        if cv2.pointPolygonTest(np.array(zone), point, False) >= 0:
+            return i + 1
+    return None
+
+def rect_to_polygon(rect):
+    x, y, w, h = rect
+    return [
+        (x, y),
+        (x + w, y),
+        (x + w, y + h),
+        (x, y + h)
+    ]
+
+def get_frame_stats(results, frame_index, rois=[]):
+
     """Retourne une liste de dictionnaires avec les stats frame-par-frame"""
     frame_data = []
 
@@ -34,24 +54,29 @@ def get_frame_stats(results, frame_index):
         kpts_list = keypoints.xy.cpu().tolist() if keypoints is not None else [None] * len(ids)
 
         for tid, (x1, y1, x2, y2), kp in zip(ids, boxes_xyxy, kpts_list):
+
             x, y, w, h = x1, y1, x2 - x1, y2 - y1
+            bottom_center = (x + w / 2, y + h)
 
-            person_data = {
-                'frame_index': frame_index,
-                'track_id': tid,
-                'bbox_x': x,
-                'bbox_y': y,
-                'bbox_w': w,
-                'bbox_h': h,
-                **{f"{name}_x": None for name in KPT_NAMES},
-                **{f"{name}_y": None for name in KPT_NAMES},
-            }
+            zone = get_zone(bottom_center, rois)
 
-            if kp:
-                for idx, (xk, yk) in enumerate(kp):
-                    person_data[f"{KPT_NAMES[idx]}_x"] = None if xk == 0.0 and yk == 0.0 else xk
-                    person_data[f"{KPT_NAMES[idx]}_y"] = None if xk == 0.0 and yk == 0.0 else yk
+            if zone is not None:
+                person_data = {
+                    'frame_index': frame_index,
+                    'track_id': tid,
+                    'bbox_x': x,
+                    'bbox_y': y,
+                    'bbox_w': w,
+                    'bbox_h': h,
+                    **{f"{name}_x": None for name in KPT_NAMES},
+                    **{f"{name}_y": None for name in KPT_NAMES},
+                }
 
-            frame_data.append(person_data)
+                if kp:
+                    for idx, (xk, yk) in enumerate(kp):
+                        person_data[f"{KPT_NAMES[idx]}_x"] = None if xk == 0.0 and yk == 0.0 else xk
+                        person_data[f"{KPT_NAMES[idx]}_y"] = None if xk == 0.0 and yk == 0.0 else yk
+
+                frame_data.append(person_data)
 
     return frame_data

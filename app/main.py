@@ -6,8 +6,9 @@ import shutil, cv2, asyncio
 import time
 import io
 import csv
+import numpy as np
 
-from .utils import load_model, get_frame_stats
+from .utils import rect_to_polygon, load_model, get_frame_stats
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -40,20 +41,24 @@ async def upload_video(file: UploadFile = File(...)):
     return {"status": "ok", "path": str(file_path)}
 
 
-def video_generator(source="webcam", path=None, task="detect", size="n"):
+def video_generator(source="webcam", path=None, task="detect", size="n", rois=None):
     """Flux vidéo synchrone, met à jour CURRENT_STATS"""
     global CURRENT_STATS
-
+    
     if source == "webcam":
         cap = cv2.VideoCapture(0)
     elif source == "video" and path:
         cap = cv2.VideoCapture(path)
     else:
-        return
+        raise ValueError("Source invalide : utiliser 'webcam' ou 'video' avec path.")
 
+    # --- Chargement du modèle ---
     model = load_model(task, size)
     _last_time = time.time()
     frame_index = 1
+
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
     while True:
         ret, frame = cap.read()
@@ -67,14 +72,22 @@ def video_generator(source="webcam", path=None, task="detect", size="n"):
         CURRENT_STATS["fps"] = fps
 
         # Détection
-        results = model.track(frame, classes=[0], persist=True)
-        CURRENT_STATS["detections"] = len(results[0].boxes)
+        results = model.track(frame, classes=[0], verbose=False)
+        frame_data = get_frame_stats(results, frame_index, rois)
+        
+        CURRENT_STATS["detections"] = len(frame_data)
 
         # Details des détections
-        VIDEO_STATS.extend(get_frame_stats(results, frame_index))
+        VIDEO_STATS.extend(frame_data)
 
         # Frame annotée
         annotated_frame = results[0].plot()
+        
+        for roi in rois:
+            pts = np.array(roi, dtype=np.int32)
+            pts = pts.reshape((-1, 1, 2))
+            cv2.polylines(annotated_frame, [pts] , thickness=3, color=(0,0,255), isClosed=True)
+
         _, buffer = cv2.imencode(".jpg", annotated_frame)
 
         frame_bytes = buffer.tobytes()
@@ -87,15 +100,23 @@ def video_generator(source="webcam", path=None, task="detect", size="n"):
     cap.release()
 
 
+from fastapi import Query
+import json
+
 @app.get("/stream")
 async def stream_video(
     source: str = "webcam",
     path: str = None,
     task: str = "detect",
-    size: str = "n"
+    size: str = "n",
+    rois: str = Query(None)
 ):
+    rois_list = json.loads(rois) if rois else []
+    
+    rois_list = [[[px*3, py*3] for px, py in roi] for roi in rois_list]
+    print(rois_list)
     return StreamingResponse(
-        video_generator(source, path, task, size),
+        video_generator(source=source, path=path, task=task, size=size, rois=rois_list),
         media_type="multipart/x-mixed-replace; boundary=frame"
     )
 

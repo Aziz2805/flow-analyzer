@@ -30,7 +30,7 @@ Then open your browser at 👉 http://127.0.0.1:8000
 
 
 **Project Structure**
-
+```
 flow-analyzer/
 │── app/
 │   ├── main.py          # FastAPI entrypoint
@@ -38,5 +38,5 @@ flow-analyzer/
 │   └── utils/           # Helper functions
 │── requirements.txt
 │── README.md
-
+```
 👉 Here you go! 🎉

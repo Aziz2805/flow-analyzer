@@ -3,6 +3,10 @@
 Welcome to **FlowAnalyzer**!
 If you want to analyze the flow in public places, you're in the right place.
 
+**Requirements**:
+- Python
+- Git
+- Pip
 
 - Clone the respository & navigate to it:
 ```
@@ -14,8 +18,9 @@ cd flow-analyzer
 python -m venv flow-analyzer-env
 flow-analyzer-env\Scripts\activate 
 ```
-- Install requirements
+- Upgrade pip & install requirements
 ```
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 - 🧠 Load vision models in ONNX format

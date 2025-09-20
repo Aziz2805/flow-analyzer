@@ -1,5 +1,5 @@
 # Environnements virtuels
-app_env/
+flow-analyzer-env/
 .venv/
 venv/
 

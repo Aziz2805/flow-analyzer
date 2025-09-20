@@ -1,13 +1,11 @@
-# Environnements virtuels
+# Environnement virtuel
 flow-analyzer-env/
-.venv/
-venv/
 
 # Uploads et données locales
 uploads/
 outputs/
 data/
-
+ 
 # Cache Python
 __pycache__/
 *.pyc

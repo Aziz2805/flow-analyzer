@@ -4,9 +4,10 @@ Welcome to **FlowAnalyzer**!
 If you want to analyze the flow in public places, you're in the right place.
 
 
-- Clone the respository:
+- Clone the respository & navigate to it:
 ```
 git clone https://github.com/Aziz2805/flow-analyzer
+cd flow-analyzer
 ```
 - Create a virtual environment & activate it
 ```

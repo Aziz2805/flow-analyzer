@@ -1,10 +1,15 @@
-from ultralytics import YOLO, RTDETR
+from ultralytics import YOLO
+import os
 
+export_path = os.path.join("app", "models")
+os.makedirs(export_path, exist_ok=True)
 
-for i in {'n', 's', 'm', 'l', 'x'}:
-    
-    detect_model = YOLO(f'yolo11{i}.pt')
-    detect_model.export(format="onnx")
+variants = ['n', 's', 'm', 'l', 'x']
 
-    pose_model = YOLO(f'yolo11{i}-pose.pt')
-    pose_model.export(format="onnx")
+for v in variants:
+    for model_type in ["", "-pose"]:
+        model_name = f"yolo11{v}{model_type}.pt"
+        model = YOLO(model_name)
+        model.export(format="onnx")
+        os.remove(model_name)
+        os.replace(f"yolo11{v}{model_type}.onnx", os.path.join(export_path, f"yolo11{v}{model_type}.onnx"))

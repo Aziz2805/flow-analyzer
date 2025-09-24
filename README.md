@@ -1,7 +1,22 @@
 # 🚀 FlowAnalyzer 
 
 Welcome to **FlowAnalyzer**!
-If you want to analyze the flow in public places, you're in the right place.
+
+This app helps you extract real-time actionable flow insights from video surveillance, enabling better management of public spaces.
+You can either upload a video or activate your own webcam, and the system would start running a Computer Vision **detection model** (YOLO) & a **tracker** (Botsort), showing real-time people counts evolution and the app's latency performance (FPS).
+
+You can either choose to run a detection-only model, or a pose model. The pose model will not only detect the person but also her **keypoints**. Eich person is defined by 17 keypoints (Nose, left/right eye, shoulder, ankle, wrist etc.)
+
+The model's size can be configurated in 5 options (n,s,m,l,x). The larger the model, the better is the accuracy, but the lower is inference speed. You should adapt this parameter based on your computing resources. 
+
+The detection zone can be restricted by selecting 4 coordinates (in 2D format) which defines the observation zone (ROIs). You can select as many zones as you want.
+
+Finally, detections can be csv-exported in 2 formats:
+
+- A specific report containing frame by frame counts. Eich row represents a specific frame and the associated counts.
+  
+- A detailed report containing all the detections (frame by frame), where eich detected person is defined by the frame where it's been detected, her ID, her bounding-box coordinated and her keypoints coordinated (if the "Pose" task option is choosen, otherwise keypoints columns will remain blank).
+
 
 **Requirements**:
 - Python

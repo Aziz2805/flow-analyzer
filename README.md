@@ -55,11 +55,11 @@ flow-analyzer-env\Scripts\activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
-- 🧠 Load vision models in ONNX format
+- Load vision models in ONNX format
 ```
 python app/models/export_onnx.py
 ```
-- ▶️ Start the app
+- Start the app
 ```
 uvicorn app.main:app --reload
 ```

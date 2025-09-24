@@ -4,8 +4,8 @@ Welcome to **FlowAnalyzer** – your tool to extract real-time, actionable insig
 
 ## 🎥 How it works
 Upload a video or use your webcam, and **FlowAnalyzer** runs:  
-- A **detection model** (YOLO)  
-- A **tracker** (Botsort)  
+- A **detection model** ([YOLO](https://arxiv.org/pdf/1506.02640))  
+- A **tracker** ([Botsort](https://arxiv.org/pdf/2206.14651))  
 
 See **real-time people counts** and app performance (FPS) as it happens. ⚡  
 

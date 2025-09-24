@@ -1,27 +1,20 @@
-# 🚀 FlowAnalyzer 
+# 🚀 FlowAnalyzer
 
-Welcome to **FlowAnalyzer**!
+Welcome to FlowAnalyzer!
 
-This app helps you extract real-time actionable flow insights from video surveillance, enabling better management of public spaces.
-You can either upload a video or activate your own webcam, and the system would start running a Computer Vision **detection model** (YOLO) & a **tracker** (Botsort), showing real-time people counts evolution and the app's latency performance (FPS).
+FlowAnalyzer helps you extract real-time, actionable flow insights from video surveillance, enabling smarter management of public spaces. You can upload a video or use your webcam, and the system will run a detection model (YOLO) and a tracker (Botsort), displaying real-time people counts and latency performance (FPS).
 
-You can either choose to run a detection-only model, or a pose model. The pose model will not only detect the person but also her **keypoints**. Eich person is defined by 17 keypoints (Nose, left/right eye, shoulder, ankle, wrist etc.)
+You can choose between a detection-only model or a pose model. The pose model detects each person’s keypoints (17 in total: nose, eyes, shoulders, wrists, ankles, etc.) in addition to their presence.
 
-The model's size can be configurated in 5 options (n,s,m,l,x). The larger the model, the better is the accuracy, but the lower is inference speed. You should adapt this parameter based on your computing resources. 
+The model comes in five sizes (n, s, m, l, x). Larger models offer higher accuracy but slower inference speed. Choose the size according to your computing resources.
 
-The detection zone can be restricted by selecting 4 coordinates (in 2D format) which defines the observation zone (ROIs). You can select as many zones as you want.
+Detection zones can be restricted by specifying four 2D coordinates to define Regions of Interest (ROIs). You can select as many zones as you need.
 
-Finally, detections can be csv-exported in 2 formats:
+Finally, detection results can be exported as CSV in two formats:
 
-- A specific report containing frame by frame counts. Eich row represents a specific frame and the associated counts.
-  
-- A detailed report containing all the detections (frame by frame), where eich detected person is defined by the frame where it's been detected, her ID, her bounding-box coordinated and her keypoints coordinated (if the "Pose" task option is choosen, otherwise keypoints columns will remain blank).
+- Summary report: frame-by-frame people counts, one row per frame.
+- Detailed report: all detections per frame, including person ID, bounding box coordinates, and keypoints (if the Pose model is selected; otherwise keypoint columns remain empty).
 
-
-**Requirements**:
-- Python
-- Git
-- Pip
 
 **Installation instructions:**
 

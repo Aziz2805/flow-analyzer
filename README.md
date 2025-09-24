@@ -25,7 +25,7 @@ Export detection results in **CSV** format:
 - **Detailed report:** all detections per frame, including **person ID, bounding box, and keypoints** (if Pose model selected).  
 
 
-**Installation instructions:**
+## ⚙️Installation Instructions:
 
 - Clone the respository & navigate to it:
 ```

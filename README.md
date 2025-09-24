@@ -1,19 +1,28 @@
 # 🚀 FlowAnalyzer
 
-Welcome to FlowAnalyzer!
+Welcome to **FlowAnalyzer** – your tool to extract real-time, actionable insights from video surveillance and manage public spaces smarter! 👀  
 
-FlowAnalyzer helps you extract real-time, actionable flow insights from video surveillance, enabling smarter management of public spaces. You can upload a video or use your webcam, and the system will run a detection model (YOLO) and a tracker (Botsort), displaying real-time people counts and latency performance (FPS).
+## 🎥 How it works
+Upload a video or use your webcam, and **FlowAnalyzer** runs:  
+- A **detection model** (YOLO)  
+- A **tracker** (Botsort)  
 
-You can choose between a detection-only model or a pose model. The pose model detects each person’s keypoints (17 in total: nose, eyes, shoulders, wrists, ankles, etc.) in addition to their presence.
+See **real-time people counts** and app performance (FPS) as it happens. ⚡  
 
-The model comes in five sizes (n, s, m, l, x). Larger models offer higher accuracy but slower inference speed. Choose the size according to your computing resources.
+## 🧍 Models
+- **Detection-only:** Detects people in the scene.  
+- **Pose model:** Detects people **and their 17 keypoints** (nose, eyes, shoulders, wrists, ankles, etc.) for advanced analysis.  
 
-Detection zones can be restricted by specifying four 2D coordinates to define Regions of Interest (ROIs). You can select as many zones as you need.
+Model sizes: **n, s, m, l, x** – larger models = higher accuracy, slower speed. Choose based on your hardware. 💻  
 
-Finally, detection results can be exported as CSV in two formats:
+## 📍 Detection Zones
+Restrict detection to specific areas using **4 2D coordinates** (ROIs).  
+You can define **as many zones as you want**. ✅  
 
-- Summary report: frame-by-frame people counts, one row per frame.
-- Detailed report: all detections per frame, including person ID, bounding box coordinates, and keypoints (if the Pose model is selected; otherwise keypoint columns remain empty).
+## 📊 Export Results
+Export detection results in **CSV** format:  
+- **Summary report:** frame-by-frame people counts.  
+- **Detailed report:** all detections per frame, including **person ID, bounding box, and keypoints** (if Pose model selected).  
 
 
 **Installation instructions:**

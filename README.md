@@ -16,7 +16,7 @@ See **real-time people counts** and app performance (FPS) as it happens. ⚡
 Model sizes: **n, s, m, l, x** – larger models = higher accuracy, slower speed. Choose based on your hardware. 💻  
 
 ## 📍 Detection Zones
-Restrict detection to specific areas using **4 2D coordinates** (ROIs).  
+Restrict detection to specific areas using **4x2D coordinates** (ROIs).  
 You can define **as many zones as you want**. ✅  
 
 ## 📊 Export Results

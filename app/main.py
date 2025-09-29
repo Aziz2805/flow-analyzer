@@ -86,7 +86,7 @@ def video_generator(source="webcam", path=None, task="detect", size="n", rois=No
         for roi in rois:
             pts = np.array(roi, dtype=np.int32)
             pts = pts.reshape((-1, 1, 2))
-            cv2.polylines(annotated_frame, [pts] , thickness=3, color=(0,0,255), isClosed=True)
+            cv2.polylines(annotated_frame, [pts] , thickness=4, color=(0,0,255), isClosed=True)
 
         _, buffer = cv2.imencode(".jpg", annotated_frame)
 
@@ -137,8 +137,8 @@ async def websocket_detections(ws: WebSocket):
             if data["fps"] > 0 or data["detections"] > 0:
                 # Stockage historique pour le CSV
                 HISTORY_STATS.append({
-                    "horodatage": time.strftime("%Y-%m-%d %H:%M:%S"),
-                    "comptages": data["detections"],
+                    "time": time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "counts": data["detections"],
                     "fps": data["fps"]
                 })
 
@@ -156,22 +156,22 @@ async def websocket_detections(ws: WebSocket):
 
 @app.get("/export")
 async def export_kpis():
-    """Export CSV des KPIs (comptages + fps)"""
+    """Export CSV des KPIs (counts + fps)"""
     output = io.StringIO()
-    fieldnames = ["horodatage", "comptages", "fps"]
+    fieldnames = ["time", "counts", "fps"]
     writer = csv.DictWriter(output, fieldnames=fieldnames)
     writer.writeheader()
     for row in HISTORY_STATS:
         writer.writerow({
-            "horodatage": row.get("horodatage", ""),
-            "comptages": int(row.get("comptages", 0)),
+            "time": row.get("time", ""),
+            "counts": int(row.get("counts", 0)),
             "fps": float(row.get("fps", 0))
         })
     output.seek(0)
     return StreamingResponse(
         io.BytesIO(output.getvalue().encode("utf-8")),
         media_type="text/csv",
-        headers={"Content-Disposition": "attachment; filename=kpis.csv"}
+        headers={"Content-Disposition": "attachment; filename=summary_report.csv"}
     )
 
 
@@ -192,5 +192,5 @@ async def export_frames():
     return StreamingResponse(
         io.BytesIO(output.getvalue().encode("utf-8")),
         media_type="text/csv",
-        headers={"Content-Disposition": "attachment; filename=frame_by_frame.csv"}
+        headers={"Content-Disposition": "attachment; filename=detailed_report.csv"}
     )

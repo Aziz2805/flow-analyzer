@@ -1,4 +1,5 @@
 import cv2
+import os
 from ultralytics import YOLO
 
 import numpy as np
@@ -6,15 +7,19 @@ from ultralytics import solutions
 
 
 def load_model(task: str, size: str):
+
+    weights_path = os.path.join("app","models","weights")
+    model_name = f"yolo11{size}"
+
     if size != "custom":
         if task == "detect":
-            model_path = f"app/models/yolo11{size}.onnx" 
+            model_path = os.path.join(weights_path, f"{model_name}.onnx")
         else:
-            model_path = f"app/models/yolo11{size}-pose.onnx"
+            model_path = os.path.join(weights_path, f"{model_name}-pose.onnx")
     else:
-        model_path = f"app/models/yolo11l-custom.onnx"
-
+        model_path = os.path.join(weights_path, f"{model_name}-custom.onnx")
     model = YOLO(model_path)
+
     return model
 
 

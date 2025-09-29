@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Analyse temps réel des flux</title>
+  <title>🚀 FlowAnalyzer : Real-Time flow analysis for public spaces </title>
   <style>
     body { font-family: Arial, sans-serif; background: #f4f6f9; color: #333; margin: 0; padding: 20px; }
     h2 { font-size: 25px; text-align: center; color: #444; }
@@ -24,7 +24,7 @@
   </style>
 </head>
 <body>
-  <h2>Analyse temps réel des flux</h2>
+  <h2>🚀 FlowAnalyzer : Real-Time flow analysis for public spaces</h2>
 
   <form id="source-form">
     <fieldset>
@@ -35,23 +35,23 @@
     </fieldset>
 
     <fieldset>
-      <legend>Tâche</legend>
+      <legend>Task</legend>
       <label><input type="radio" name="task" value="detect" checked> Detection</label>
       <label><input type="radio" name="task" value="pose"> Pose</label>
     </fieldset>
 
     <fieldset>
-      <legend>Taille du modèle</legend>
+      <legend>Model size</legend>
       <label><input type="radio" name="size" value="n" checked> N</label>
       <label><input type="radio" name="size" value="s"> S</label>
       <label><input type="radio" name="size" value="m"> M</label>
       <label><input type="radio" name="size" value="l"> L</label>
       <label><input type="radio" name="size" value="x"> X</label>
-      <label><input type="radio" name="size" value="custom"> Notre modèle</label>
+      <label><input type="radio" name="size" value="custom"> Custom Model</label>
     </fieldset>
 
     <fieldset>
-      <legend>Zones d'intérêt (ROIs)</legend>
+      <legend>Regions of interest (ROIs)</legend>
       <div id="rois-container">
         <div class="roi">
           Point 1: X <input type="number" name="x1" value="0" style="width:50px;"> Y <input type="number" name="y1" value="0" style="width:50px;">
@@ -60,17 +60,17 @@
           Point 4: X <input type="number" name="x4" value="0" style="width:50px;"> Y <input type="number" name="y4" value="480" style="width:50px;">
         </div>
       </div>
-      <button type="button" id="add-roi">Ajouter une zone</button>
+      <button type="button" id="add-roi">Add zone</button>
     </fieldset>
 
-    <button type="submit">▶ Lancer</button>
+    <button type="submit">▶ Start</button>
   </form>
 
   <div style="margin: 20px 0;">
     <h3>📥 Export</h3>
     <div style="display: flex; gap: 10px;">
-      <button onclick="window.location.href='/export'">Comptages</button>
-      <button onclick="window.location.href='/export_frames'">Détaillé</button>
+      <button onclick="window.location.href='/export'">Summary report</button>
+      <button onclick="window.location.href='/export_frames'">Detailed report</button>
     </div>
   </div>
 
@@ -81,7 +81,7 @@
     <div id="right-container">
       <div id="kpi-row">
         <div class="kpi-card">
-          <h3>Comptages</h3>
+          <h3>Counts</h3>
           <span id="kpi">0</span>
         </div>
         <div class="kpi-card">

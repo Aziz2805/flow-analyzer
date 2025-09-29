@@ -1,14 +1,31 @@
-# 🚀 FlowAnalyzer 
+# 🚀 FlowAnalyzer : Real-Time flow analysis for public spaces
 
-Welcome to **FlowAnalyzer**!
-If you want to analyze the flow in public places, you're in the right place.
+Welcome to **FlowAnalyzer** – your tool to extract real-time, actionable insights from video surveillance and manage public spaces smarter! 👀  
 
-**Requirements**:
-- Python
-- Git
-- Pip
+## 🎥 How it works
+Upload a video or use your webcam, and **FlowAnalyzer** runs:  
+- A **detection model** ([YOLOv11](https://arxiv.org/pdf/2410.17725))  
+- A **tracker** ([Botsort](https://arxiv.org/pdf/2206.14651))  
 
-**Installation instructions:**
+See **real-time people counts** and app performance (FPS) as it happens. ⚡  
+
+## 🧍 Models
+- **Detection-only:** Detects people in the scene.  
+- **Pose model:** Detects people **and their 17 keypoints** (nose, eyes, shoulders, wrists, ankles, etc.) for advanced analysis.  
+
+Model sizes: **n, s, m, l, x** – larger models = higher accuracy, slower speed. Choose based on your hardware. 💻  
+
+## 📍 Detection Zones
+Restrict detection to specific areas using **4x2D coordinates** (ROIs).  
+You can define **as many zones as you want**. ✅  
+
+## 📊 Export Results
+Export detection results in **CSV** format:  
+- **Summary report:** frame-by-frame people counts.  
+- **Detailed report:** all detections per frame, including **person ID, bounding box, and keypoints** (if Pose model selected).  
+
+
+## ⚙️Installation Instructions:
 
 - Clone the respository & navigate to it:
 ```
@@ -38,11 +55,11 @@ flow-analyzer-env\Scripts\activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
-- 🧠 Load vision models in ONNX format
+- Load vision models in ONNX format
 ```
 python app/models/export_onnx.py
 ```
-- ▶️ Start the app
+- Start the app
 ```
 uvicorn app.main:app --reload
 ```

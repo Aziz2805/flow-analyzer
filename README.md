@@ -1,10 +1,10 @@
-# 🚀 FlowAnalyzer
+# 🚀 FlowAnalyzer : Real-Time flow analysis for public spaces
 
 Welcome to **FlowAnalyzer** – your tool to extract real-time, actionable insights from video surveillance and manage public spaces smarter! 👀  
 
 ## 🎥 How it works
 Upload a video or use your webcam, and **FlowAnalyzer** runs:  
-- A **detection model** ([YOLO](https://arxiv.org/pdf/1506.02640))  
+- A **detection model** ([YOLOv11](https://arxiv.org/pdf/2410.17725))  
 - A **tracker** ([Botsort](https://arxiv.org/pdf/2206.14651))  
 
 See **real-time people counts** and app performance (FPS) as it happens. ⚡  
